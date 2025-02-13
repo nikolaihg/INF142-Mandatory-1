@@ -13,4 +13,22 @@ def startClient(serverName, serverPort):
     print(f"From server: {modifisertSetning.decode()}")
     clientSocket.close()
 
+def send_request(request):
+    pass
+
+def pick_input():
+    choice = input() #print options
+    if choice == "":
+        return ""
+    elif choice == "":
+        return ""
+    elif choice == "": 
+        return ""
+    else:
+        print("Invalid input, try again")
+        pick_input()
+
+def client():
+    pass
+
 startClient("localhost", 3000)

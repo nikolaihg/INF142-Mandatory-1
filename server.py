@@ -1,10 +1,19 @@
 from socket import *
 import json
 
-# "Database"
+# "database"
 database = dict()
 
-def startServer(serverPort):
+def show_votes(problem):
+    pass
+
+def show_problem(problem_ID):
+    pass
+
+def show_problems():
+    pass
+
+def start_server(serverPort):
     serverSocket = socket(AF_INET, SOCK_STREAM)
     serverSocket.bind(("", serverPort))
     serverSocket.listen(1)
@@ -21,10 +30,10 @@ def startServer(serverPort):
     except KeyboardInterrupt:
         print("\nServer is shutting down...")
     finally:
-        closeServer(serverSocket)
+        close_server(serverSocket)
 
-def closeServer(serverSocket):
+def close_server(serverSocket):
     serverSocket.close()
     print("Server socket closed.")
 
-startServer(3000)
+start_server(3000)
