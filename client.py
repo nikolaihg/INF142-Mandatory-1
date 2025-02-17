@@ -7,19 +7,16 @@ def startClient(serverName, serverPort):
 
     try:
         while True:
-            setning = pick_input()
-            if setning.lower() == "exit":
+            choice = pick_input()
+            if choice.lower() == "exit":
                 clientSocket.send("exit".encode())
                 break
-            clientSocket.send(setning.encode())
+            clientSocket.send(choice.encode())
             modifisertSetning = clientSocket.recv(1024)
             print(f"From server: {modifisertSetning.decode()}")
     finally:
         clientSocket.close()
         print("Connection closed.")
-
-def send_request(request):
-    pass
 
 def pick_input():
     prompt = """
@@ -54,8 +51,5 @@ def pick_input():
     else:
         print("Invalid input, try again")
         pick_input()
-
-def client():
-    pass
 
 startClient("localhost", 3000)

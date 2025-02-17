@@ -3,10 +3,12 @@ import json
 
 # "database"
 database = {
-    100: {
-        "title": "Favorite programming language?",
-        "options": {"Python": 0, "Java": 0, "C++": 0}
-    }
+    100 : {
+    "tittel": "Hva skal jeg ha til middag?",
+    "alternativ": {
+        "Pølse": 0, "Hamburger": 0, "PIzza": 0
+        }
+    }  
 }
 
 def show_votes(problem_id):
