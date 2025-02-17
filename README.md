@@ -1,15 +1,23 @@
-# inf142-mandatory-1
+# INF142 – Obligatorisk Oppgave 1
 
-## Beskreivelse
+## Beskrivelse
 
-Obligatorisk oppgave i INF142
-`oppgaver.md` / `oppgaver.pdf` inneholder svar til tekst oppgavene, mens `server.py` og `client.py` implementerer stemmeapplikasjonen ved bruk av websockets.
+Obligatorisk oppgave i INF142.  
+- Filen `oppgaver.md` / `oppgaver.pdf` inneholder svar på tekstoppgavene.  
+- Filene `server.py` og `client.py` implementerer en stemmeapplikasjon ved bruk av WebSockets.
 
-## Requirements
+## Krav
+
+- Python 3.x.
+
+## Kjøring av prosjektet
+
+1. Start serveren ved å kjøre:
+```bash
+python server.py
 ```
-python 3.x
-``` 
+2. Så åpne ett nytt terminalvindu og start      klienten:
+```bash
+python client.py
+```
 
-## Kjøring av prosjektet:  
-1. Kjør `server.py`
-2. Kjør `client.py`
