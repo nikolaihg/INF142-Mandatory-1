@@ -24,11 +24,11 @@ def show_problem(problem_ID):
 def show_problems():
     return json.dumps({k: v["title"] for k, v in database.items()})
 
-def handle_client_input(setning):
-    if setning == "2":
+def handle_client_input(choice):
+    if choice == "2":
         return show_problems()
-    elif setning.startswith("valg: 3"):
-        parts = setning.split()
+    elif choice.startswith("3"):
+        parts = choice.split()
         if len(parts) == 3:
             problem_id = int(parts[2])
             return show_problem(problem_id)

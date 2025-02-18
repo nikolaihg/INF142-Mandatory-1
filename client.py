@@ -1,13 +1,23 @@
 from socket import *
 import json
 
-def startClient(serverName, serverPort):
+PROMPT = """
+1. (POST problem) Legg til problem.
+2. Vis alle eksisterende problemer.
+3. Vis problem: (problem_ID).
+4. Vis alternativ: (problem_ID).
+5. Stem på alternativ: (problem_ID).
+6. Vis stemmer: (problem_ID).
+7. Skriv 'exit' for å avslutte.
+"""
+
+def startClient(serverName, serverPort, prompt):
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName, serverPort))
 
     try:
         while True:
-            choice = pick_input()
+            choice = pick_input(prompt)
             if choice.lower() == "exit":
                 clientSocket.send("exit".encode())
                 break
@@ -18,16 +28,7 @@ def startClient(serverName, serverPort):
         clientSocket.close()
         print("Connection closed.")
 
-def pick_input():
-    prompt = """
-1. Legg til problem.
-2. Vis alle eksisterende problemer.
-3. Vis problem: (problem_ID).
-4. Vis alternativ: (problem_ID).
-5. Stem på alternativ: (problem_ID).
-6. Vis stemmer: (problem_ID).
-7. Skriv 'exit' for å avslutte.
-"""
+def pick_input(prompt):
     print(prompt)
     choice = input("Velg handling: ")
     if choice == "1":
@@ -36,20 +37,20 @@ def pick_input():
         return choice
     elif choice == "3": 
         problem_ID = input("problem_ID: ")
-        return choice
+        return choice + " " + problem_ID
     elif choice == "4":
         problem_ID = input("problem_ID: ")
-        return choice
+        return choice + " " + problem_ID
     elif choice == "5":
         problem_ID = input("problem_ID: ")
-        return choice
+        return choice + " " + problem_ID
     elif choice == "6":
         problem_ID = input("problem_ID: ")
-        return choice
+        return choice + " " + problem_ID
     elif choice.lower() == "exit":
         return "exit"
     else:
         print("Invalid input, try again")
-        pick_input()
+        pick_input(prompt)
 
-startClient("localhost", 3000)
+startClient("localhost", 3000, PROMPT)

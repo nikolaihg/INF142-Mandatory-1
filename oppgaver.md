@@ -16,7 +16,7 @@ database = {
     }  
 }
 ``` 
-(Først kommer problemID, så under er all informasjonen om selve problemet.)
+(Først kommer problemID, så all tilhørende informasjon om selve problemet.)
 
 ### Meldinger
 
@@ -36,7 +36,7 @@ Klient oppgir tittel og alternativ, får tilbake problemID som ble generet da tj
     "melding" : "problem lagt til i database",
     "problemID" : problemID,
     ```
-#### **Spør etter problem: (valg 2. i `client.py`**
+#### **Spør etter problem: (valg 2. i `client.py`=)**
 Klient velger valg nr. 2 i prompt, server returnerer alle problemer som er lagret i databasen.
 - Klient $\rightarrow$ Server: 
     ```json
@@ -55,7 +55,7 @@ Klient velger valg nr. 2 i prompt, server returnerer alle problemer som er lagre
         88 : { (...) },
     }
     ```
-#### **Vis en problemformulering: (valg 3. i `client.py`**
+#### **Vis en problemformulering: (valg 3. i `client.py`)**
 Klient velger valg 3 i prompt, så oppgir problemID, server returnerer samsvarende problem (hvis det finnes).
 - Klient $\rightarrow$ Server: 
     ```json
@@ -74,7 +74,7 @@ Klient velger valg 3 i prompt, så oppgir problemID, server returnerer samsvaren
     ```json
     "melding" : "Ønsket problem finnes ikke"
     ```
-#### **Vis alternativer: (valg 4. i `client.py`**
+#### **Vis alternativer: (valg 4. i `client.py`)**
 Klient gir problemID, så returnerer server alternativene for gitt problem.
 - Klient $\rightarrow$ Server: 
     ```json
@@ -89,7 +89,7 @@ Klient gir problemID, så returnerer server alternativene for gitt problem.
         "Alternativ 2",
         "(...)"]
     ```
-#### **Stem på alternativ: (valg 5. i `client.py`**
+#### **Stem på alternativ: (valg 5. i `client.py`)**
 Klient oppgir problemID, så oppgir tjener tittel+alternativ (via samme funksjon som i valg 3.), så stemmer klient på ønsket alternativ. Deretter så bekrefter tjener at den har mottatt stemmen.
 - Klient $\rightarrow$ Server: 
     ```json
@@ -107,6 +107,7 @@ Klient oppgir problemID, så oppgir tjener tittel+alternativ (via samme funksjon
 - Klient $\rightarrow$ Server:
     ```json
     "stemme" : STEMME (tall = 1..n)
+    ```
 - Klient $\leftarrow$ Server: 
     ```json
     "melding" : "stemme mottatt",
@@ -116,12 +117,13 @@ Klient oppgir problemID, så oppgir tjener tittel+alternativ (via samme funksjon
         "Alternativ 2",
         "(...)"]
     ```
-#### **Vis stemmer på et problem: (valg 6. i `client.py`**
+#### **Vis stemmer på et problem: (valg 6. i `client.py`)**
 Klient oppgir valg 6 i prompt, så problemID. Tjener svarer med tittel på problemet og antall stemmer.
 - Klient $\rightarrow$ Server: 
     ```json 
     "kommando" : 6,
     "problemID" : problemID
+    ```
 - Klient $\leftarrow$ Server: 
     ```json
     "tittel" : "tittel tekst",
