@@ -17,17 +17,50 @@ database = {
     }   
 }
 
-def get_votes():
-    # Returnerer databasen som JSON-streng, i henhold til valg 2 slik som spesifiser i oppgaveteksten.
-    return json.dumps(database, indent=2, ensure_ascii=False)
-
+# Spør etter problem (valg 2. i client.py)
 def get_problem(problemID): 
-    # Returnerer tittel og alternativer for et gitt problemID, men ikke selve ID-en.
-    problemID = int(problemID)  # Konverter til heltall
+    """Returnerer tittel og alternativer for et gitt problemID"""
+    problemID = int(problemID)
     if problemID in database:
         problem = database[problemID]
         return json.dumps({
             "tittel": problem["tittel"],
+            "alternativ": problem["alternativ"]
+        }, indent=2, ensure_ascii=False)
+    return f"Feil: Problem med ID {problemID} finnes ikke."
+
+# Vis en problemformulering (valg 3. i client.py)
+def get_votes():
+    """Returnerer databasen som JSON-streng, i henhold til valg 2 slik som spesifiser i oppgaveteksten."""
+    return json.dumps(database, indent=2, ensure_ascii=False)
+
+# Vis alternativer (valg 4. i client.py)
+def show_options(problemID):
+    """Returnerer alternativene og stemmetall for gitt problemID."""
+    problemID = int(problemID)
+    if problemID in database:
+        return json.dumps(database[problemID]["alternativ"], indent=2, ensure_ascii=False)
+    return f"Feil: Problem med ID {problemID} finnes ikke."
+
+# Stem på alternativ (valg 5. i client.py)
+def vote(problemID, vote):
+    """Øker stemmetallet for alternativ for problem gitt ved problemID."""
+    problemID = int(problemID)
+    if problemID in database:
+        if vote in database[problemID]["alternativ"]:
+            database[problemID]["alternativ"][vote] += 1
+            return f"Stemme registrert: '{vote}' for problem {problemID}."
+        else:
+            return f"Feil: '{vote}' er ikke et gyldig alternativ for problem {problemID}."
+    return f"Feil: Problem med ID {problemID} finnes ikke."
+
+# Vis stemmer på et problem (valg 6. i client.py)
+def show_votes(problemID):
+    """Returnerer stemmetall for et gitt problemID."""
+    problemID = int(problemID)
+    if problemID in database:
+        problem = database[problemID]
+        return json.dumps({
             "alternativ": problem["alternativ"]
         }, indent=2, ensure_ascii=False)
     return f"Feil: Problem med ID {problemID} finnes ikke."
@@ -60,28 +93,31 @@ def start_server(serverPort):
                 elif message == "2":
                     response = f"\n{get_votes()}"
                     connectionSocket.send(response.encode())
-                # Sjekker om melding inneholder ett mellomrom, siden dette betyr at den også inneholder en problemID
+                # Sjekker om melding inneholder ett mellomrom, siden dette betyr at den også inneholder en problemID / og kanskje stemme
                 elif " " in message:  
                     parts = message.split(" ", 2)  # Split into maks 3 deler
                     command = parts[0]
                     problemID = parts[1]
-
                     # Hvis kommando er "3" (hente problem)
                     if command == "3":
                         response = f"\n{get_problem(problemID)}"
                         connectionSocket.send(response.encode())
+                    # Hvis kommando er "4" (vise alternativer/stemmer)
+                    elif command == "4":
+                        response = f"\n{show_options(problemID)}"
+                        connectionSocket.send(response.encode())
                     # Hvis kommando er "5" (stemming)
-                    if command == "5" and len(parts) == 3:
-                        vote = parts[2]
-                        response = f"Stemme mottatt: {vote} for problem {problemID}"
+                    elif command == "5" and len(parts) == 3:
+                        choice = parts[2]
+                        vote(problemID, choice)
+                        print(database)
+                    # Hvis kommando er "6" (vise stemmer)
+                    elif command == "6":
+                        response = f"\n{show_votes(problemID)}"
                         connectionSocket.send(response.encode())
-                    else:
-                        response = f"kommando: {command}, problemID: {problemID}"
-                        connectionSocket.send(response.encode())
-                # Standard respons for "enkel kommando"
+                # Standard respons hvis kommando som blir sendt er feil
                 elif message:
-                    # melding som sendes til klient
-                    response = f"Respons fra tjener: {message}"
+                    response = f"Send kommando {message} ble ikke parset"
                     connectionSocket.send(response.encode())
             except Exception as e:
                 print(f"Error: {e}")
