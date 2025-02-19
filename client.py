@@ -23,33 +23,34 @@ def startClient(serverName, serverPort, prompt):
             return
         print(f"Fra tjener: {serverResponse.decode()}")
     finally:
-        # Lukker klient socket etter at en respons er sendt
+        # lukker klient socket etter at en respons er sendt
         clientSocket.close()
         print("Connection closed.")
 
 def pick_input(prompt):
-    # velger rett innput via prom
+    # velger rett innput via prompt
     print(prompt)
     choice = input("Velg handling: ")
 
     if choice == "1":
-        return choice
+        return choice # Format: "1"
     elif choice == "2":
-        return choice
+        return choice # Format: "2"
     elif choice == "3":
         problem_ID = input("problem_ID: ")
-        return choice + " " + problem_ID
+        return choice + " " + problem_ID # Format: "3 problem_ID"
     elif choice == "4":
         problem_ID = input("problem_ID: ")
-        return choice + " " + problem_ID
-    elif choice == "5":
+        return choice + " " + problem_ID # Format: 4 problem_ID
+    elif choice == "5":  # 
         problem_ID = input("problem_ID: ")
-        return choice + " " + problem_ID
+        vote = input("Skriv din stemme: ") 
+        return choice + " " + problem_ID + " " + vote  # Format: "5 problem_ID vote"
     elif choice == "6":
         problem_ID = input("problem_ID: ")
-        return choice + " " + problem_ID
+        return choice + " " + problem_ID # Format: "6 problem_ID"
     elif choice.lower() == "exit":
-        return "exit"
+        return "exit" # Format: "exit"
     else:
         print("Ugyldig input, prøv igjen!")
         return pick_input(prompt)
