@@ -17,6 +17,22 @@ database = {
     }   
 }
 
+# Post problem (valg 1. i client.py)
+def post_problem(problemID, tittel, alternatives):
+    """Legger til et nytt problem i databasen."""
+    problemID = int(problemID)
+    # Sjekker om problemID allerede finnes
+    if problemID in database:
+        return f"Feil: Problem med ID {problemID} finnes allerede."
+    # Konverterer alternativer fra streng til dictionary med stemmetall 0
+    alt_dict = {alt.strip(): 0 for alt in alternatives.split(",")}
+    # Legger til det nye problemet i databasen
+    database[problemID] = {
+        "tittel": tittel,
+        "alternativ": alt_dict
+    }
+    return f"Problem {problemID} lagt til: {tittel} med alternativer {list(alt_dict.keys())}."
+
 # Spør etter problem (valg 2. i client.py)
 def get_problem(problemID): 
     """Returnerer tittel og alternativer for et gitt problemID"""
@@ -86,18 +102,18 @@ def start_server(serverPort):
                 if message.lower() == "exit":
                     print(f"kommando: {message} -> kobling stengt")
                     pass 
-                elif message == "1":
-                    response = f"Respons fra tjener: {message}"
-                    connectionSocket.send(response.encode())
                 # Hvis klient velger alternativ 2, send databasen
                 elif message == "2":
                     response = f"\n{get_votes()}"
                     connectionSocket.send(response.encode())
                 # Sjekker om melding inneholder ett mellomrom, siden dette betyr at den også inneholder en problemID / og kanskje stemme
                 elif " " in message:  
-                    parts = message.split(" ", 2)  # Split into maks 3 deler
+                    parts = message.split(" ", 3)  # Split into maks 4 deler
                     command = parts[0]
                     problemID = parts[1]
+                    # Legge til nytt problem (1 problemID tittel alternativer)
+                    if command == "1" and len(parts) == 4:
+                        # Jeg har ikke klart å implementer denne enda
                     # Hvis kommando er "3" (hente problem)
                     if command == "3":
                         response = f"\n{get_problem(problemID)}"

@@ -33,6 +33,10 @@ def pick_input(prompt):
     choice = input("Velg handling: ")
 
     if choice == "1":
+        problemID = input("problemID: ")
+        tittel = input("tittel: ")
+        alternativ = input("alternativ: ")
+        return choice + " " + tittel + " " + alternativ # Format: "3 problemID Tittel alternativ"
         return choice # Format: "1"
     elif choice == "2":
         return choice # Format: "2"
