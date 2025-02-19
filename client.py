@@ -19,6 +19,8 @@ def startClient(serverName, serverPort, prompt):
         choice = pick_input(prompt)
         clientSocket.send(choice.encode())
         serverResponse = clientSocket.recv(1024)
+        if choice == "exit":
+            return
         print(f"Fra tjener: {serverResponse.decode()}")
     finally:
         # Lukker klient socket etter at en respons er sendt
