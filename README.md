@@ -3,7 +3,7 @@
 ## Beskrivelse
 
 Obligatorisk oppgave i INF142.  
-- Filen `oppgaver.md` / `oppgaver.pdf` inneholder svar på tekstoppgavene.  
+- Filen `INF142_mandatory.pdf` inneholder svar på tekstoppgavene.  
 - Filene `server.py` og `client.py` implementerer en stemmeapplikasjon ved bruk av WebSockets.
 
 ## Krav

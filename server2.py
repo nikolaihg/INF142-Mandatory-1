@@ -11,18 +11,22 @@ database = {
     }  
 }
 
-def show_votes(problemID):
-    return f"vis stemmer() {problemID}"
+def show_votes(problem_id):
+    if problem_id in database:
+        return json.dumps(database[problem_id].get("options", {}))
+    return f"Problem ID {problem_id} not found."
+
+def show_problem(problem_ID):
+    if problem_ID in database:
+        return json.dumps(database[problem_ID])
+    return f"Problem ID {problem_ID} not found."
 
 def show_problems():
-    return "vis problemer()"
-
-def show_problem(problemID):
-    return f"vis problem() {problemID}"
+    return json.dumps({k: v["title"] for k, v in database.items()})
 
 def handle_client_input(choice):
     if choice == "2":
-        return ""
+        return show_problems()
     elif choice.startswith("3"):
         parts = choice.split()
         if len(parts) == 3:
@@ -39,18 +43,34 @@ def start_server(serverPort):
     serverSocket.listen(1)
     print("Server has started!")
 
+    # try:
+    #     while True:
+    #         connectionSocket, addr = serverSocket.accept()
+    #         try:
+    #             setning = connectionSocket.recv(1024).decode()
+    #             print(f"From client: {setning}")
+    #             storeBokstaver = setning.upper()
+    #             connectionSocket.send(storeBokstaver.encode())
+    #         finally:
+    #             connectionSocket.close()
+    #             print("Connection socket closed")
+    # except KeyboardInterrupt:
+    #     print("\nServer is shutting down...")
+    # finally:
+    #     close_server(serverSocket)
+
     try:
         while True:
             connectionSocket, addr = serverSocket.accept()
             print(f"Connected to {addr}")
             try:
                 while True:
-                    message = connectionSocket.recv(1024).decode()
-                    if not message or message.lower() == "exit":
+                    setning = connectionSocket.recv(1024).decode()
+                    if not setning or setning.lower() == "exit":
                         break
 
-                    print(f"From client: {message}")
-                    response = handle_client_input(message)
+                    print(f"From client: {setning}")
+                    response = handle_client_input(setning)
                     connectionSocket.send(response.encode())
 
             except Exception as e:
