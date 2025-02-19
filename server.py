@@ -11,29 +11,8 @@ database = {
     }  
 }
 
-def show_votes(problemID):
-    return f"vis stemmer() {problemID}"
-
-def show_problems():
-    return "vis problemer()"
-
-def show_problem(problemID):
-    return f"vis problem() {problemID}"
-
-def handle_client_input(choice):
-    if choice == "2":
-        return ""
-    elif choice.startswith("3"):
-        parts = choice.split()
-        if len(parts) == 3:
-            problem_id = int(parts[2])
-            return show_problem(problem_id)
-        else:
-            return "Invalid request format."
-    else:
-        return "Unknown command."
-
 def start_server(serverPort):
+    # starter tjener socket
     serverSocket = socket(AF_INET, SOCK_STREAM)
     serverSocket.bind(("", serverPort))
     serverSocket.listen(1)
@@ -41,31 +20,28 @@ def start_server(serverPort):
 
     try:
         while True:
+            # kobler til klient
             connectionSocket, addr = serverSocket.accept()
             print(f"Connected to {addr}")
+            
             try:
-                while True:
-                    message = connectionSocket.recv(1024).decode()
-                    if not message or message.lower() == "exit":
-                        break
-
+                # mottat melding fra klient
+                message = connectionSocket.recv(1024).decode()
+                if message:
                     print(f"From client: {message}")
-                    response = handle_client_input(message)
+                    # melding som sendes til klient
+                    response = f"Respons fra server: {message}"
                     connectionSocket.send(response.encode())
-
             except Exception as e:
                 print(f"Error: {e}")
             finally:
                 connectionSocket.close()
-                print("Connection socket closed")
+                print("Tilkobling stengt")
     except KeyboardInterrupt:
-        print("\nServer is shutting down...")
+        # tjener stenges ved ctrl-c
+        print("\nTjener stenges...")
     finally:
         serverSocket.close()
-        print("Server socket closed.")
-
-def close_server(serverSocket):
-    serverSocket.close()
-    print("Server socket closed.")
+        print("Tjener socket stengt.")
 
 start_server(3000)
