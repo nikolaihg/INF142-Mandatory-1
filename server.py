@@ -3,12 +3,6 @@ import json
 
 # "database"
 database = {
-    100 : {
-    "tittel": "Hva skal jeg ha til middag?",
-    "alternativ": {
-        "Pølse": 0, "Hamburger": 0, "Pizza": 0
-        }
-    },
     101 : {
     "tittel": "Når skal jeg stå opp",
     "alternativ": {
@@ -18,20 +12,13 @@ database = {
 }
 
 # Post problem (valg 1. i client.py)
-def post_problem(problemID, tittel, alternatives):
-    """Legger til et nytt problem i databasen."""
-    problemID = int(problemID)
-    # Sjekker om problemID allerede finnes
-    if problemID in database:
-        return f"Feil: Problem med ID {problemID} finnes allerede."
-    # Konverterer alternativer fra streng til dictionary med stemmetall 0
-    alt_dict = {alt.strip(): 0 for alt in alternatives.split(",")}
-    # Legger til det nye problemet i databasen
-    database[problemID] = {
-        "tittel": tittel,
-        "alternativ": alt_dict
-    }
-    return f"Problem {problemID} lagt til: {tittel} med alternativer {list(alt_dict.keys())}."
+def post_problem(input_string, database):
+    """Tar inn helt "bokstavelig JSON streng, og gjør om til problem."""
+    key, value = input_string.split(":", 1) 
+    key = int(key.strip()) 
+    value_dict = json.loads(value.strip().replace("'", '"'))
+    
+    database[key] = value_dict 
 
 # Spør etter problem (valg 2. i client.py)
 def get_problem(problemID): 
@@ -102,18 +89,20 @@ def start_server(serverPort):
                 if message.lower() == "exit":
                     print(f"kommando: {message} -> kobling stengt")
                     pass 
+                elif message.startswith("1 "):
+                    message = message.replace("1 ", "", 1)
+                    post_problem(message, database)
+                    response = f"Problem added to database"
+                    connectionSocket.send(response.encode())
                 # Hvis klient velger alternativ 2, send databasen
                 elif message == "2":
                     response = f"\n{get_votes()}"
                     connectionSocket.send(response.encode())
                 # Sjekker om melding inneholder ett mellomrom, siden dette betyr at den også inneholder en problemID / og kanskje stemme
                 elif " " in message:  
-                    parts = message.split(" ", 3)  # Split into maks 4 deler
+                    parts = message.split(" ", 2)  # Split into maks 3 deler
                     command = parts[0]
                     problemID = parts[1]
-                    # Legge til nytt problem (1 problemID tittel alternativer)
-                    if command == "1" and len(parts) == 4:
-                        # Jeg har ikke klart å implementer denne enda
                     # Hvis kommando er "3" (hente problem)
                     if command == "3":
                         response = f"\n{get_problem(problemID)}"

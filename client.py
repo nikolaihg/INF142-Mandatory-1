@@ -33,11 +33,10 @@ def pick_input(prompt):
     choice = input("Velg handling: ")
 
     if choice == "1":
-        problemID = input("problemID: ")
-        tittel = input("tittel: ")
-        alternativ = input("alternativ: ")
-        return choice + " " + tittel + " " + alternativ # Format: "3 problemID Tittel alternativ"
-        return choice # Format: "1"
+        print("Skriv inn problem på følgende måte:")
+        print('100 : {"tittel": "Hva skal jeg ha til middag?","alternativ": {"Pølse": 0, "Hamburger": 0, "Pizza": 0}}')
+        json_string = input()
+        return choice + " " + json_string
     elif choice == "2":
         return choice # Format: "2"
     elif choice == "3":
