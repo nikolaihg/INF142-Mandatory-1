@@ -70,7 +70,7 @@ Klienten sender en kommando for å legge til et nytt problem med tittel og alter
     \end{verbatim}
     \item Server \(\rightarrow\) Klient:
     \begin{verbatim}
-    "Problem problem lagt til i databasen."
+    "Problem lagt til i databasen."
     \end{verbatim}
 \end{itemize}
 
@@ -107,7 +107,7 @@ Klienten sender kommandoen "3" sammen med problemID for å hente informasjon om 
 \begin{itemize}
     \item Klient \(\rightarrow\) Server:
     \begin{verbatim}
-    3;100
+    "3;100"
     \end{verbatim}
      \item Server \(\rightarrow\) Klient (Hvis funnet):
      \begin{verbatim}
@@ -130,7 +130,7 @@ Klienten sender kommandoen "4" sammen med problemID for å hente alternativene f
 \begin{itemize}
     \item Klient \(\rightarrow\) Server:
     \begin{verbatim}
-    4;100
+    "4;100"
     \end{verbatim}
     \item Server \(\rightarrow\) Klient:
     \begin{verbatim}

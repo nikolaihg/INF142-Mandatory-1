@@ -102,7 +102,7 @@ def handle_response(message: str) -> str :
     # Hvis melding fra klient er "exit", så sender man ikke noe respons
     if message.lower() == "exit":
         print(f"kommando: {message}")
-        print("Kobling stengt")
+        print("Kobling stengt.")
         pass 
     # Hvis melding fra klient starter med "1;" -> legg til problem
     elif message.startswith("1;"):
@@ -130,7 +130,7 @@ def handle_response(message: str) -> str :
         elif command.startswith("5") and len(parts) >= 3:
             choice = parts[2]
             vote(problemID, choice)
-            response = f"Stemmer oppdater for problem: {problemID}"
+            response = f"Stemmer oppdater for problem: {problemID}."
             print(response)
             print(database)
         # Hvis kommando er "6" -> vise stemmer
@@ -154,7 +154,7 @@ def start_server(serverPort: int):
         while True:
             # kobler til klient
             connectionSocket, addr = serverSocket.accept()
-            print(f"Koblet til {addr}")
+            print(f"Koblet til {addr}.")
             
             try:
                 # mottat melding fra klient
@@ -165,10 +165,10 @@ def start_server(serverPort: int):
                 # sende respons til klient
                 connectionSocket.send(response.encode())
             except Exception as e:
-                print(f"Feil: {e}")
+                print(f"Feil: {e}.")
             finally:
                 connectionSocket.close()
-                print("Tilkobling stengt")
+                print("Tilkobling stengt.")
     except KeyboardInterrupt:
         # tjener stenges ved ctrl-c
         print("\nTjener stenges...")
