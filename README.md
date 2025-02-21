@@ -1,16 +1,16 @@
-# INF142 – Obligatorisk Oppgave 1
+# 📚 INF142 – Obligatorisk Oppgave 1
 
-## Beskrivelse
+## 📝 Beskrivelse
 
 Obligatorisk oppgave i INF142.  
-- Filen `INF142_mandatory.pdf` inneholder svar på tekstoppgavene.  
+- Filen [`INF142_mandatory_1.pdf`](INF142_mandatory_1.pdf) inneholder svar på tekstoppgavene.  
 - Filene `server.py` og `client.py` implementerer en stemmeapplikasjon ved bruk av WebSockets.
 
-## Krav
+## ⚙️ Krav
 
 - Python 3.x.
 
-## Kjøring av prosjektet
+## 🚀 Kjøring av prosjektet
 
 1. Start serveren ved å kjøre:
 ```bash
