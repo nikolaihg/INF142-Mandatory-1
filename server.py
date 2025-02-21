@@ -102,17 +102,17 @@ def handle_response(message: str) -> str :
     # Hvis melding fra klient er "exit", så sender man ikke noe respons
     if message.lower() == "exit":
         print(f"kommando: {message}")
-        print("kobling stengt")
+        print("Kobling stengt")
         pass 
     # Hvis melding fra klient starter med "1;" -> legg til problem
     elif message.startswith("1;"):
         post_problem(message, database)
-        response = "Problem added to database"
+        response = "Problem problem lagt til i databasen."
         print(response)
     # Hvis klient velger alternativ "2;" -> send databasen
     elif message.startswith("2"):
         response = f"\n{get_votes()}"
-        print("Showing problems to client.")
+        print("Viser alle problem til klient.")
     # Sjekker om melding inneholder ";", siden dette betyr at den også inneholder en problemID / og kanskje stemme
     elif ";" in message:  
         parts = message.split(";", 3)  # Splitert melding i maks 4 deler ["kommando", "problemID", "tittel", "alternativ"]
@@ -121,22 +121,22 @@ def handle_response(message: str) -> str :
         # Hvis kommando er "3" -> hente problem
         if command.startswith("3"):
             response = f"\n{get_problem(problemID)}"
-            print(f"Showing problem: {problemID} to client.")
+            print(f"Viser problem: {problemID} til klient.")
         # Hvis kommando er "4" -> vise alternativer
         elif command.startswith("4"):
             response = f"\n{show_options(problemID)}"
-            print(f"Showing alternatives: {problemID} to client.")
+            print(f"Viser alternativ: {problemID} til klient.")
         # Hvis kommando er "5" -> stemming
         elif command.startswith("5") and len(parts) >= 3:
             choice = parts[2]
             vote(problemID, choice)
-            response = f"Votes updated for: {problemID}"
+            response = f"Stemmer oppdater for problem: {problemID}"
             print(response)
             print(database)
         # Hvis kommando er "6" -> vise stemmer
         elif command.startswith("6"):
             response = f"\n{show_votes(problemID)}"
-            print(f"Showing votes: {problemID} to client.")
+            print(f"Viser stemmer for {problemID} til klient.")
     # Standard respons hvis kommando som blir sendt er feil
     else:
         response = f"Send kommando {message} ble ikke parset."
@@ -165,7 +165,7 @@ def start_server(serverPort: int):
                 # sende respons til klient
                 connectionSocket.send(response.encode())
             except Exception as e:
-                print(f"Error: {e}")
+                print(f"Feil: {e}")
             finally:
                 connectionSocket.close()
                 print("Tilkobling stengt")

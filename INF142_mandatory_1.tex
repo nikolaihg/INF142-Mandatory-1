@@ -1,0 +1,203 @@
+\documentclass[hidelinks]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{xcolor}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{bookmark}
+\usepackage{lmodern}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\setcounter{secnumdepth}{3}
+
+\renewcommand{\thesection}{\alph{section})}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+\renewcommand{\contentsname}{Innhold}
+
+\title{INF142 Obligatorisk Oppgave 1}
+\author{Nikolai Gangstø}
+\date{Februar 2025}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section*{Github}
+Svaret mitt finnes også på: \url{https://github.com/nikolaihg/INF142-Mandatory-1}.
+
+\newpage
+
+\section{Applikasjonsnivåprotokoll}
+
+\subsection{Format}
+All kommunikasjon mellom klient og server skjer via tekststrenger som er formatert med semikolon (\texttt{;}) som skilletegn. Disse tekststrengene blir deretter prosessert av serveren og lagret i en database som et Python-dictionary. 
+
+\subsubsection*{Generelt format for klientmeldinger:}
+Klienten sender en streng som starter med et tall som representerer kommandoen, så etterfulgt av andre parameterer avhengig av hvilken kommando som blir gitt og ønsket respons. Er ikke noe grense på hvor mange alternativ du kan legge til, så lenge de kommer sist.
+\begin{verbatim}
+<kommando>;<problemID>;<tittel>;<alternativ1>;<alternativ2>;...
+\end{verbatim}
+
+\subsubsection*{Eksempel for å opprette et problem:}
+\begin{verbatim}
+1;100;Hva skal jeg ha til middag?;Pølse;Hamburger;Pizza
+\end{verbatim}
+
+\subsubsection*{Python-databasen:}
+\begin{verbatim}
+database = {
+    100: {
+        "tittel": "Hva skal jeg ha til middag?",
+        "alternativ": {
+            "Pølse": 0, "Hamburger": 0, "Pizza": 0
+        }
+    },
+    (...)
+}
+\end{verbatim}
+
+\subsection{Meldinger}
+
+\subsubsection{Legg til problem (valg 1 i client.py)}
+Klienten sender en kommando for å legge til et nytt problem med tittel og alternativer. Serveren lagrer problemet i databasen og returnerer en bekreftelse.
+
+\begin{itemize}
+    \item Klient \(\rightarrow\) Server:
+    \begin{verbatim}
+    "1;100;Hva skal jeg ha til middag?;Pølse;Hamburger;Pizza"
+    \end{verbatim}
+    \item Server \(\rightarrow\) Klient:
+    \begin{verbatim}
+    "Problem problem lagt til i databasen."
+    \end{verbatim}
+\end{itemize}
+
+\subsubsection{Vis alle problemer (valg 2 i client.py)}
+Klienten sender kommandoen "2" for å hente alle problemer fra databasen.
+
+\begin{itemize}
+    \item Klient \(\rightarrow\) Server:
+    \begin{verbatim}
+    "2"
+    \end{verbatim}
+    \item Server \(\rightarrow\) Klient:
+    \begin{verbatim}
+    "{
+        "100": {
+            "tittel": "Hva skal jeg ha til middag?",
+            "alternativ": {
+                "Pølse": 0, "Hamburger": 0, "Pizza": 0
+            }
+        },
+        "101": {
+            "tittel": "Når skal jeg stå opp?",
+            "alternativ": {
+                "13:00": 0, "07:00": 0, "09:00": 0
+            }
+        }
+    }"
+    \end{verbatim}
+\end{itemize}
+
+\subsubsection{Vis et spesifikt problem (valg 3 i client.py)}
+Klienten sender kommandoen "3" sammen med problemID for å hente informasjon om et spesifikt problem.
+
+\begin{itemize}
+    \item Klient \(\rightarrow\) Server:
+    \begin{verbatim}
+    3;100
+    \end{verbatim}
+     \item Server \(\rightarrow\) Klient (Hvis funnet):
+     \begin{verbatim}
+    "{
+        "tittel": "Hva skal jeg ha til middag?",
+        "alternativ": {
+            "Pølse": 0, "Hamburger": 0, "Pizza": 0
+        }
+    }"
+    \end{verbatim}
+    \item Server \(\rightarrow\) Klient (Hvis ikke funnet):
+    \begin{verbatim}
+    "Feil: Problem med ID 100 finnes ikke."
+    \end{verbatim}
+\end{itemize}
+
+\subsubsection{Vis alternativer for et problem (valg 4 i client.py)}
+Klienten sender kommandoen "4" sammen med problemID for å hente alternativene for et spesifikt problem.
+
+\begin{itemize}
+    \item Klient \(\rightarrow\) Server:
+    \begin{verbatim}
+    4;100
+    \end{verbatim}
+    \item Server \(\rightarrow\) Klient:
+    \begin{verbatim}
+    "{
+        "Pølse": 0, "Hamburger": 0, "Pizza": 0
+    }"
+    \end{verbatim}
+\end{itemize}
+
+\subsubsection{Stem på et alternativ (valg 5 i client.py)}
+Klienten sender kommandoen "5" sammen med problemID og stemmen for å registrere en stemme.
+
+\begin{itemize}
+    \item Klient \(\rightarrow\) Server:
+    \begin{verbatim}
+   " 5;100;Pølse"
+    \end{verbatim}
+    \item Server \(\rightarrow\) Klient:
+    \begin{verbatim}
+    "Stemme registrert: 'Pølse' for problem 100."
+    \end{verbatim}
+    \item Klient \(\rightarrow\) Server:
+\end{itemize}
+
+\subsubsection{Vis stemmer for et problem (valg 6 i client.py)}
+Klienten sender kommandoen "6" sammen med problemID for å hente stemmene for et spesifikt problem.
+
+\begin{itemize}
+    \item Klient \(\rightarrow\) Server:
+    \begin{verbatim}
+    6;100
+    \end{verbatim}
+    \item Server \(\rightarrow\) Klient:
+    \begin{verbatim}
+    "{
+        "Pølse": 1, "Hamburger": 0, "Pizza": 0
+    }"
+\end{verbatim}
+\end{itemize}
+
+\subsection{Avslutning (valg 7. i client.py}
+Klienten kan avslutte forbindelsen ved å sende kommandoen "exit".
+
+\begin{itemize}
+    \item Klient \(\rightarrow\) Server:
+    \begin{verbatim}
+    "exit"
+    \end{verbatim}
+     \item Server \(\rightarrow\) Klient:
+     \begin{verbatim}
+    (ingen respons, forbindelsen avsluttes)
+    \end{verbatim}
+\end{itemize}
+
+\section{Tilstandsløs vs tilstandsfull og TCP vs UDP}
+
+\subsection{Tilstandsløs vs tilstandsfull}
+
+Applikasjonsprotokollen er tilstandsløs, siden hver melding inneholder all nødvendig informasjon.
+
+\subsection{TCP vs UDP}
+
+TCP er best egnet da vi trenger pålitelig overføring av data for å sikre at stemmer registreres riktig.
+
+\section{Implementering av klient-server-applikasjonen i Python}
+
+\subsection{Se \texttt{server.py} og \texttt{client.py}.}
+NB: Jeg har ikke klart å implementere \texttt{post\textunderscore{problem}}.
+
+\end{document}
