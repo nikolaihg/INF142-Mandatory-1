@@ -10,13 +10,13 @@ PROMPT = """
 7. Skriv 'exit' for å avslutte.
 """
 
-def startClient(serverName: str, serverPort: int, prompt: str):
-    # starter klient socket
+def start_client(serverName: str, serverPort: int, prompt: str):
+    """Starter klient socket, tar hånd om brukerinput"""
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName, serverPort))
     try:
         # sender korrekt input til serverSocket og får tilbake en respons
-        choice = pick_input(prompt)
+        choice = get_user_input(prompt)
         clientSocket.send(choice.encode())
         serverResponse = clientSocket.recv(1024)
         if choice == "exit":
@@ -27,38 +27,37 @@ def startClient(serverName: str, serverPort: int, prompt: str):
         clientSocket.close()
         print("Connection closed.")
 
-def pick_input(prompt: str) -> str:
+def get_user_input(prompt: str) -> str:
+    """Returnerer en formatert string av brukervalg\n
+    For eksempel: "1;200;Hva skal vi gjøre i helgen?; Gå på kino; Spille Spill" for å legge til ett nytt problem
+    """
     print(prompt)
     choice = input("Velg handling: ")
+    
     if choice == "1":
-        problemID = input("problemID: ")
-        tittel = input("tittel: ")
+        problem_id = input("problemID: ")
+        title = input("tittel: ")
         alternatives = []
         while True:
             alternative = input("Skriv inn et alternativ (eller 'stop' for å avslutte): ")
             if alternative.lower() == "stop":
                 break
             alternatives.append(alternative)
-        return choice + ";" + problemID + ";" + tittel + ";" + ";".join(alternatives)
-    elif choice == "2":
+        return f"{choice};{problem_id};{title};{';'.join(alternatives)}"
+    elif choice in {"2", "3", "4", "6"}:
+        if choice != "2":
+            problem_id = input("problemID: ")
+            return f"{choice};{problem_id}"
         return choice
-    elif choice == "3":
-        problemID = input("problemID: ")
-        return choice + ";" + problemID
-    elif choice == "4":
-        problemID = input("problemID: ")
-        return choice + ";" + problemID 
-    elif choice == "5":  # 
-        problemID = input("problemID: ")
-        vote = input("Skriv din stemme: ") 
-        return choice + ";" + problemID + ";" + vote
-    elif choice == "6":
-        problemID = input("problemID: ")
-        return choice + ";" + problemID
+    elif choice == "5":
+        problem_id = input("problemID: ")
+        vote = input("Skriv din stemme: ")
+        return f"{choice};{problem_id};{vote}"
     elif choice.lower() == "exit":
         return "exit"
     else:
         print("Ugyldig input, prøv igjen!")
-        return pick_input(prompt)
+        get_user_input(prompt)
 
-startClient("localhost", 3000, PROMPT)
+if __name__ == "__main__":
+    start_client("localhost", 3000, PROMPT)

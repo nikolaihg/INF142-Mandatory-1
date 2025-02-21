@@ -176,4 +176,5 @@ def start_server(serverPort: int):
         serverSocket.close()
         print("Tjener socket stengt.")
 
-start_server(3000)
+if __name__ == "__main__":
+    start_server(3000)
