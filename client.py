@@ -10,7 +10,7 @@ PROMPT = """
 7. Skriv 'exit' for å avslutte.
 """
 
-def startClient(serverName, serverPort, prompt):
+def startClient(serverName: str, serverPort: int, prompt: str):
     # starter klient socket
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName, serverPort))
@@ -27,33 +27,36 @@ def startClient(serverName, serverPort, prompt):
         clientSocket.close()
         print("Connection closed.")
 
-def pick_input(prompt):
-    # velger rett innput via prompt
+def pick_input(prompt: str) -> str:
     print(prompt)
     choice = input("Velg handling: ")
-
     if choice == "1":
-        print("Skriv inn problem på følgende måte:")
-        print('100 : {"tittel": "Hva skal jeg ha til middag?","alternativ": {"Pølse": 0, "Hamburger": 0, "Pizza": 0}}')
-        json_string = input()
-        return choice + " " + json_string
+        problemID = input("problemID: ")
+        tittel = input("tittel: ")
+        alternatives = []
+        while True:
+            alternative = input("Skriv inn et alternativ (eller 'stop' for å avslutte): ")
+            if alternative.lower() == "stop":
+                break
+            alternatives.append(alternative)
+        return choice + ";" + problemID + ";" + tittel + ";" + ";".join(alternatives)
     elif choice == "2":
-        return choice # Format: "2"
+        return choice
     elif choice == "3":
         problemID = input("problemID: ")
-        return choice + " " + problemID # Format: "3 problemID"
+        return choice + ";" + problemID
     elif choice == "4":
         problemID = input("problemID: ")
-        return choice + " " + problemID # Format: 4 problemID
+        return choice + ";" + problemID 
     elif choice == "5":  # 
         problemID = input("problemID: ")
         vote = input("Skriv din stemme: ") 
-        return choice + " " + problemID + " " + vote  # Format: "5 problemID vote"
+        return choice + ";" + problemID + ";" + vote
     elif choice == "6":
         problemID = input("problemID: ")
-        return choice + " " + problemID # Format: "6 problemID"
+        return choice + ";" + problemID
     elif choice.lower() == "exit":
-        return "exit" # Format: "exit"
+        return "exit"
     else:
         print("Ugyldig input, prøv igjen!")
         return pick_input(prompt)
